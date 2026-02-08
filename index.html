@@ -1,91 +1,285 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Will You Be My Valentine? 💖</title>
-<style>
-body{
-  margin:0;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#ffd6e8,#fff);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-}
-.card{
-  background:white;
-  padding:30px;
-  border-radius:20px;
-  box-shadow:0 20px 40px rgba(0,0,0,.15);
-  text-align:center;
-  max-width:400px;
-  width:100%;
-}
-h1{font-size:2rem;margin-bottom:10px}
-p{opacity:.8;margin-bottom:25px}
-button{
-  font-size:1.1rem;
-  padding:14px 20px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:700;
-}
-#yes{
-  background:#22c55e;
-  color:white;
-  width:100%;
-}
-#no{
-  background:#ef4444;
-  color:white;
-  margin-top:15px;
-  position:relative;
-}
-.result{
-  display:none;
-  margin-top:20px;
-  font-size:1.1rem;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Will you be my Valentine? 💘</title>
+  <style>
+    :root{
+      --bg1:#ffd6e8;
+      --bg2:#fff3f8;
+      --card:#ffffffcc;
+      --text:#111827;
+      --yes:#22c55e;
+      --no:#ef4444;
+      --shadow: 0 18px 45px rgba(0,0,0,.16);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: radial-gradient(circle at 20% 10%, #ffb7d3 0%, transparent 35%),
+                  radial-gradient(circle at 80% 20%, #ffd1e5 0%, transparent 40%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      overflow:hidden;
+      padding:24px;
+    }
+    .card{
+      width:min(720px,100%);
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:26px;
+      text-align:center;
+      position:relative;
+    }
+    h1{
+      margin:10px 0 8px;
+      font-size: clamp(28px, 3.6vw, 44px);
+      letter-spacing:-0.02em;
+    }
+    p{ margin:0 0 18px; opacity:.85; font-size:16px; }
+    .img{
+      width:min(360px,90%);
+      aspect-ratio: 1 / 1;
+      border-radius:18px;
+      margin:14px auto 18px;
+      background: #fff;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:0 16px 28px rgba(0,0,0,.10);
+      overflow:hidden;
+    }
+    .img img{
+      width:100%; height:100%;
+      object-fit: cover;
+      display:block;
+    }
+
+    .btnArea{
+      position:relative;
+      width:100%;
+      max-width:520px;
+      height:170px;
+      margin:0 auto;
+    }
+    button{
+      border:0;
+      border-radius:14px;
+      padding:14px 18px;
+      font-size:18px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 14px 30px rgba(0,0,0,.14);
+      user-select:none;
+      white-space:nowrap;
+    }
+    #yes{
+      position:absolute;
+      left:50%;
+      top:18px;
+      transform:translateX(-50%);
+      width:min(240px, 84%);
+      background:linear-gradient(180deg,#34d399,#22c55e);
+      color:#fff;
+    }
+    #no{
+      position:absolute;
+      left:50%;
+      top:92px;
+      transform:translateX(-50%);
+      width:min(240px, 84%);
+      background:linear-gradient(180deg,#fb7185,#ef4444);
+      color:#fff;
+    }
+
+    .final{
+      display:none;
+      margin-top:16px;
+      padding:16px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.08);
+      text-align:left;
+    }
+    .final h2{ margin:0 0 8px; font-size:22px; }
+    .final .small{ opacity:.7; font-size:13px; }
+
+    .tiny{
+      margin-top:10px;
+      font-size:13px;
+      opacity:.7;
+    }
+
+    /* floating hearts */
+    .hearts{ position:fixed; inset:0; pointer-events:none; opacity:.55; }
+    .heart{
+      position:absolute;
+      width:16px; height:16px;
+      transform: rotate(45deg);
+      background:#ff3b7c;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,.15));
+    }
+    .heart:before, .heart:after{
+      content:"";
+      position:absolute;
+      width:16px; height:16px;
+      border-radius:50%;
+      background:#ff3b7c;
+    }
+    .heart:before{ left:-8px; top:0; }
+    .heart:after{ left:0; top:-8px; }
+
+    @keyframes floatUp{
+      from{ transform: translateY(120vh) rotate(45deg); opacity:0; }
+      10%{ opacity:.9; }
+      to{ transform: translateY(-25vh) rotate(45deg); opacity:0; }
+    }
+  </style>
 </head>
 <body>
+  <div class="hearts" id="hearts"></div>
 
-<div class="card">
-  <h1 id="title">Will you be my Valentine? 💘</h1>
-  <p>You can only choose honestly 😌</p>
+  <div class="card">
+    <h1 id="title">Will you be my Valentine? 💘</h1>
+    <p id="subtitle">Please choose wisely 😌</p>
 
-  <button id="yes">YES 💖</button>
-  <button id="no">NO 🙈</button>
+    <div class="img" aria-hidden="true">
+      <img id="heroImg" alt="cute" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWJtdWQ2N3RjY3QxZ2FjZ2M0dWc3bndqb2dkbWh0b3p1bG4wZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oriO0OEd9QIDdllqo/giphy.gif">
+    </div>
 
-  <div class="result" id="result"></div>
-</div>
+    <div class="btnArea" id="btnArea">
+      <button id="yes">Yes 💖</button>
+      <button id="no">No 🙈</button>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2 id="finalTitle">YAY!! 💖</h2>
+      <div id="finalText"></div>
+      <div class="small">If WhatsApp didn’t open, it might be blocked by the browser—try again or copy the message manually.</div>
+    </div>
+
+    <div class="tiny">Tip: the “No” button is shy 😅</div>
+  </div>
 
 <script>
-const yes=document.getElementById("yes");
-const no=document.getElementById("no");
-const result=document.getElementById("result");
+  // ===== CONFIG =====
+  const YOUR_WHATSAPP_NUMBER = "94773966919"; // e.g. 94771234567
+  const YOUR_NAME = "Your Love"; // optional text
+  // ==================
 
-yes.onclick=()=>{
-  result.style.display="block";
-  result.innerHTML="She said YES 😍💖<br><small>Saved 💌</small>";
-  localStorage.setItem("valentine","YES");
-};
+  const hearts = document.getElementById("hearts");
+  function spawnHeart(){
+    const h=document.createElement("div");
+    h.className="heart";
+    const left=Math.random()*100;
+    const size=10+Math.random()*16;
+    const dur=4+Math.random()*6;
+    const delay=Math.random()*1.2;
+    h.style.left = left + "vw";
+    h.style.width = size + "px";
+    h.style.height = size + "px";
+    h.style.animationDuration = dur + "s";
+    h.style.animationDelay = delay + "s";
+    hearts.appendChild(h);
+    setTimeout(()=>h.remove(), (dur+delay)*1000);
+  }
+  for(let i=0;i<18;i++) spawnHeart();
+  setInterval(spawnHeart, 380);
 
-no.onmouseenter=()=>{
-  no.style.left=Math.random()*120-60+"px";
-  no.style.top=Math.random()*60-30+"px";
-};
+  const yesBtn = document.getElementById("yes");
+  const noBtn  = document.getElementById("no");
+  const btnArea = document.getElementById("btnArea");
+  const heroImg = document.getElementById("heroImg");
+  const finalBox = document.getElementById("finalBox");
+  const finalTitle = document.getElementById("finalTitle");
+  const finalText = document.getElementById("finalText");
 
-no.onclick=()=>{
-  result.style.display="block";
-  result.innerHTML="She tried to say NO 😭<br><small>But we saved it anyway 😅</small>";
-  localStorage.setItem("valentine","NO");
-};
+  const noTexts = [
+    "No 🙈",
+    "Are you sure?",
+    "Think again 😭",
+    "Pleaseee 🥺",
+    "Don’t do this to me 😔",
+    "Last chance 😳",
+    "Ok… but what if I say please? 🥹",
+    "NO is not an option 😌"
+  ];
+  let noIndex = 0;
+
+  function openWhatsApp(answer){
+    const when = new Date().toISOString();
+    const msg = `Valentine response: ${answer} 💌\nFrom: (your valentine page)\nTime: ${when}`;
+    // wa.me format
+    const url = `https://wa.me/${encodeURIComponent(YOUR_WHATSAPP_NUMBER)}?text=${encodeURIComponent(msg)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+    return msg;
+  }
+
+  function finalize(answer){
+    // store locally too (on her device)
+    localStorage.setItem("valentine_response", JSON.stringify({answer, at: new Date().toISOString()}));
+
+    btnArea.style.opacity = "0.25";
+    btnArea.style.pointerEvents = "none";
+    finalBox.style.display = "block";
+
+    if(answer === "YES"){
+      heroImg.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2xwN2E5bG8zY2trbTZmN2p4Z2Y1YjE4Z2FsZzI2d2R2aGR1aiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26tPplGWjN0xLybiU/giphy.gif";
+      finalTitle.textContent = "YAYYYY!! 💖";
+      const msg = openWhatsApp("YES");
+      finalText.innerHTML = `
+        <div>She said <b>YES</b> 🎉💘</div>
+        <div style="margin-top:10px; opacity:.85;">(WhatsApp message prepared to send you)</div>
+        <pre style="margin-top:10px; white-space:pre-wrap; background:#111827; color:#e5e7eb; padding:12px; border-radius:12px;">${msg}</pre>
+      `;
+    } else {
+      heroImg.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXBybWZ3Z3o1aGZ4MW5iY2Vpb2c5eDhzM2Z6d2U0a3U5Y2k0aiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l2JhpjWPccQhsAMfu/giphy.gif";
+      finalTitle.textContent = "Aww 😭";
+      const msg = openWhatsApp("NO");
+      finalText.innerHTML = `
+        <div>She somehow clicked <b>NO</b> 😭</div>
+        <div style="margin-top:10px; opacity:.85;">(WhatsApp message prepared to send you)</div>
+        <pre style="margin-top:10px; white-space:pre-wrap; background:#111827; color:#e5e7eb; padding:12px; border-radius:12px;">${msg}</pre>
+      `;
+    }
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  }
+
+  // Make NO button dodge and change text
+  function moveNo(){
+    const areaRect = btnArea.getBoundingClientRect();
+    const btnRect  = noBtn.getBoundingClientRect();
+    const pad = 10;
+
+    const maxX = areaRect.width - btnRect.width - pad;
+    const maxY = areaRect.height - btnRect.height - pad;
+
+    const x = pad + Math.random() * Math.max(0, maxX);
+    const y = pad + Math.random() * Math.max(0, maxY);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top  = y + "px";
+    noBtn.style.transform = "translateX(0)";
+
+    noIndex = (noIndex + 1) % noTexts.length;
+    noBtn.textContent = noTexts[noIndex];
+  }
+
+  yesBtn.addEventListener("click", () => finalize("YES"));
+
+  // desktop + mobile
+  noBtn.addEventListener("mouseenter", moveNo);
+  noBtn.addEventListener("mousedown", (e)=>{ e.preventDefault(); moveNo(); });
+  noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveNo(); }, {passive:false});
+
+  // In case she manages to click it:
+  noBtn.addEventListener("click", () => finalize("NO"));
 </script>
-
 </body>
 </html>
-
